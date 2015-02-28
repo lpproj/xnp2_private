@@ -15,7 +15,7 @@
 #endif
 #define	OSLINEBREAK_CRLF
 
-#ifndef __GNUC__
+#if defined(_MSC_VER)
 typedef	signed int			SINT;
 typedef	signed char			SINT8;
 typedef	unsigned char		UINT8;
@@ -31,14 +31,35 @@ typedef	unsigned __int64	UINT64;
 #define	snprintf			_snprintf
 #define	vsnprintf			_vsnprintf
 #else
-#include	<stdlib.h>
-typedef	signed char			SINT8;
-typedef	unsigned char		UINT8;
-typedef	signed short		SINT16;
-typedef	unsigned short		UINT16;
-typedef	signed int			SINT32;
-typedef	signed __int64		SINT64;
-#define	INLINE				inline
+# include <stdlib.h>
+# if defined(__GNUC__) || __cplusplus >= 201103L || __STDC_VERSION__ >= 199901L
+#  include <stdint.h>
+   typedef	signed int			SINT;
+   typedef	int8_t				SINT8;
+   typedef	uint8_t				UINT8;
+   typedef	int16_t				SINT16;
+   typedef	uint16_t			UINT16;
+   typedef	int32_t				SINT32;
+   typedef	uint32_t			UINT32;
+   typedef	int64_t				SINT64;
+   typedef	uint64_t			UINT64;
+#  define	INLINE				inline
+# else
+   typedef	signed int			SINT;
+   typedef	signed char			SINT8;
+   typedef	unsigned char		UINT8;
+   typedef	signed short		SINT16;
+   typedef	unsigned short		UINT16;
+   typedef	signed int			SINT32;
+   typedef	unsigned int		UINT32;
+   typedef	signed __int64		SINT64;
+   typedef	unsigned __int64	UINT64;
+#  if defined(__cplusplus)
+#   define	INLINE				inline
+#  else
+#   define	INLINE				
+#  endif
+# endif
 #endif
 #define	FASTCALL			__fastcall
 
@@ -71,12 +92,20 @@ typedef	signed __int64		SINT64;
 #include	"lstarray.h"
 #include	"trace.h"
 
+#ifndef	max
+#define	max(a,b)	(((a) > (b)) ? (a) : (b))
+#endif
+#ifndef	min
+#define	min(a,b)	(((a) < (b)) ? (a) : (b))
+#endif
 
 #define	GETTICK()			GetTickCount()
 #if defined(TRACE)
 #define	__ASSERT(s)			assert(s)
 #else
 #define	__ASSERT(s)
+// workaround (for cbus/atapicmd.c)
+static INLINE void trace_fmt(const char *str, ...) { (void)str; }
 #endif
 #if defined(_UNICODE)
 #define	SPRINTF				sprintf
@@ -111,7 +140,7 @@ typedef	signed __int64		SINT64;
 // #define	SUPPORT_24BPP
 #define	SUPPORT_32BPP
 #define SUPPORT_NORMALDISP
-#define	MEMOPTIMIZE		1
+// #define	MEMOPTIMIZE		1
 
 #define	SOUNDRESERVE	20
 
