@@ -1,6 +1,6 @@
 #include	"compiler.h"
 #include	<time.h>
-#ifndef __GNUC__
+#if defined(_MSC_VER)
 #include	<winnls32.h>
 #endif
 #include	"resource.h"
@@ -617,9 +617,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	switch (msg) {
 		case WM_CREATE:
-#ifndef __GNUC__
-			WINNLSEnableIME(hWnd, FALSE);
-#endif
+		{
+			typedef BOOL (WINAPI *LPFN_WINAPI_HWND_BOOL)(HWND, BOOL);
+			LPFN_WINAPI_HWND_BOOL lpfnEnableIME;
+			lpfnEnableIME = reinterpret_cast<LPFN_WINAPI_HWND_BOOL>( ::GetProcAddress(::GetModuleHandle(_T("USER32")), _T("WINNLSEnableIME")) );
+			if (lpfnEnableIME)
+				lpfnEnableIME(hWnd, FALSE);
+		}
 			break;
 
 		case WM_SYSCOMMAND:
