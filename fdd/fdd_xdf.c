@@ -7,6 +7,10 @@
 
 
 static const _XDFINFO supportxdf[] = {
+#if 1
+			{0, 160,  8, 2, DISKTYPE_2DD, 0},
+			{0, 160,  9, 2, DISKTYPE_2DD, 0},
+#endif
 #if 0
 			// 256
 			{0, 154, 26, 1, DISKTYPE_2HD, 0},
