@@ -174,8 +174,7 @@ BRESULT fddxdf_eject(FDDFILE fdd) {
 
 BRESULT fddxdf_diskaccess(FDDFILE fdd) {
 
-	if ((fdd->type != DISKTYPE_BETA) ||
-		(CTRL_FDMEDIA != fdd->inf.xdf.disktype)) {
+	if (fdd->type != DISKTYPE_BETA) {
 		return(FAILURE);
 	}
 	return(SUCCESS);
@@ -299,6 +298,7 @@ BRESULT fddxdf_readid(FDDFILE fdd) {
 
 	fddlasterror = 0x00;
 	if ((!fdc.mf) ||
+		(CTRL_FDMEDIA != fdd->inf.xdf.disktype) ||
 		(fdc.rpm[fdc.us] != fdd->inf.xdf.rpm) ||
 		(fdc.crcn >= fdd->inf.xdf.sectors)) {
 		fddlasterror = 0xe0;
