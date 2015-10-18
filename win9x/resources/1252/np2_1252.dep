@@ -1,0 +1,11 @@
+# Microsoft Developer Studio Generated Dependency File, included by np2_1252.mak
+
+.\np2.rc : \
+	"..\fddseek.wav"\
+	"..\fddseek1.wav"\
+	"..\nekop2.bmp"\
+	"..\np2.ico"\
+	"..\np2debug.ico"\
+	"..\np2tool.bmp"\
+	".\np2.rc2"\
+	

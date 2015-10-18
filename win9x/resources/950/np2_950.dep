@@ -1,0 +1,5 @@
+# Microsoft Developer Studio Generated Dependency File, included by np2_950.mak
+
+.\np2.rc : \
+	".\np2.rc2"\
+	
